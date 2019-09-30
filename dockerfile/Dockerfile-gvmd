@@ -6,9 +6,11 @@ LABEL maintainer="github.com/satandyh" \
   architecture="x86-64" \
   vendor="Alpine"
 
-# install gvmd
-RUN echo http://dl-cdn.alpinelinux.org/alpine/edge/community >>/etc/apk/repositories && apk update
-RUN apk add gvmd
+# install gvmd and all dependencies
+RUN echo http://dl-cdn.alpinelinux.org/alpine/edge/community >>/etc/apk/repositories && \
+  apk --update add --no-cache gvmd
+
+COPY config/openvas-manager /etc/sysconfig/openvas-manager
 
 # create user
 RUN addgroup -g 2000 node
@@ -17,7 +19,8 @@ RUN adduser -u 2000 -G node -s /bin/sh -D node
 # run from user
 USER node
 
-COPY ./entrypoint/gvmd/docker-entrypoint.sh /usr/local/bin
+# volume?
+COPY ./entrypoint/gvmd_docker-entrypoint.sh /usr/local/bin/docker-entrypoint.sh
 RUN chmod +x /usr/local/bin/docker-entrypoint.sh
 ENTRYPOINT ["/usr/local/bin/docker-entrypoint.sh"]
 
