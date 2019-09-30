@@ -1,0 +1,29 @@
+FROM alpine:3.10.2
+LABEL maintainer="github.com/satandyh" \
+  name="openvas-docker" \
+  version="0.1" \
+  release="1.0" \
+  architecture="x86-64" \
+  vendor="Alpine"
+
+# install gvmd
+RUN echo http://dl-cdn.alpinelinux.org/alpine/edge/community >>/etc/apk/repositories && apk update
+RUN apk add gvmd
+
+# create user
+RUN addgroup -g 2000 node
+RUN adduser -u 2000 -G node -s /bin/sh -D node
+
+# run from user
+USER node
+
+COPY ./entrypoint/gvmd/docker-entrypoint.sh /usr/local/bin
+RUN chmod +x /usr/local/bin/docker-entrypoint.sh
+ENTRYPOINT ["/usr/local/bin/docker-entrypoint.sh"]
+
+CMD ["gvmd", "-f", "-v", "--listen=0.0.0.0", "--port=9390"]
+
+VOLUME ["/usr/local/var/lib/gvm"]
+
+# export gvmd ports
+EXPOSE 9390
