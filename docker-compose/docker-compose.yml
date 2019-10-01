@@ -1,8 +1,80 @@
-version: "2.1"
-
+---
+version: "3"
 services:
-  git:
-    image: git
-    build: .
+  #  redis:
+  #    image: "redis:alpine"
+  #    hostname: "redis"
+  #    command: ["redis-server", "/usr/local/etc/redis/redis.conf"]
+  #    restart: always
+  #    ports:
+  #      - "6379:6379"
+  #    networks:
+  #      - redis-net
+  #    volumes:
+  #      - "../dockerfile/config/redis.conf:/usr/local/etc/redis/redis.conf:ro"
+  #      - "redis-data:/data"
+
+  openvas:
+    build:
+      context: ../dockerfile/
+      dockerfile: Dockerfile-openvas
+    image: "satandyh/openvas"
+    hostname: "openvas"
+    restart: always
     ports:
-      - 3000:3000
+      - "9391-9392:9391-9392"
+    #    networks:
+    #      - redis-net
+    #      - default
+    volumes:
+      - "gvm-connect:/usr/local/var/run"
+      - "openvas-data:/usr/local/var/lib/openvas"
+      - "gvm-data:/usr/local/var/lib/gvm"
+      - "/etc/localtime:/etc/localtime:ro"
+#    depends_on:
+#      - redis
+
+#  gvmd:
+#    build:
+#      context: .dockerfile/
+#      dockerfile: Dockerfile-gvmd
+#    image: "satandyh/gvmd"
+#    hostname: "gvmd"
+#    restart: always
+#    ports:
+#      - "9390:9390"
+#    volumes:
+#      - "gvm-connect:/usr/local/var/run"
+#      - "openvas-data:/usr/local/var/lib/openvas"
+#      - "gvm-data:/usr/local/var/lib/gvm"
+#      # - "/tmp/ssmtp=/etc/ssmtp" # optional - ssmtp config path
+#      - "/etc/localtime:/etc/localtime:ro"
+#    depends_on:
+#      - openvas
+#
+#  gsa:
+#    image: "satandyh/gsa"
+#    hostname: "gsa"
+#    restart: always
+#    ports:
+#      - "80:80"
+#      - "443:443"
+#    volumes:
+#      - "gvm-data:/usr/local/var/lib/gvm"
+#      - "/etc/localtime:/etc/localtime:ro"
+#    depends_on:
+#      - gvmd
+#    environment:
+#      - GVMD_ADDRESS=gvm-gvmd
+#      - GVMD_PORT=9390
+#      - ENABLE_CRON=false
+
+volumes:
+  # gvm-connect:
+  # gvm-data:
+  # openvas-data:
+  redis-data:
+
+networks:
+  redis-net:
+  default:

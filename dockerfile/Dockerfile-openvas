@@ -6,9 +6,10 @@ LABEL maintainer="github.com/satandyh" \
   architecture="x86-64" \
   vendor="Alpine"
 
-# install gvmd and all dependencies
+# install openvas-scanner and delete redis
 RUN echo http://dl-cdn.alpinelinux.org/alpine/edge/community >>/etc/apk/repositories && \
-  apk --update add --no-cache gvmd
+  apk --update add --no-cache openvas-scanner && \
+  find / -name redis -exec rm -rf '{}' \;
 
 # copy config
 COPY ./config/gvmd /etc/sysconfig/gvmd

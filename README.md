@@ -20,3 +20,9 @@ Just my little attempt of using docker-compose for openvas
 - [http://dl-cdn.alpinelinux.org/alpine/edge/community/x86_64/](http://dl-cdn.alpinelinux.org/alpine/edge/community/x86_64/)
 - [https://wiki.alpinelinux.org/wiki/Setting_up_OpenVAS9](https://wiki.alpinelinux.org/wiki/Setting_up_OpenVAS9)
 - [components](https://github.com/greenbone/gvm-libs/issues/197)
+
+# redis.conf
+
+I got config from last stable version and modify it little for openvas
+
+[http://download.redis.io/redis-stable/redis.conf](http://download.redis.io/redis-stable/redis.conf)
