@@ -1,4 +1,4 @@
-FROM alpine:3.10.2
+FROM alpine:3.10
 LABEL maintainer="github.com/satandyh" \
   name="openvas-docker" \
   version="0.1" \
