@@ -8,7 +8,7 @@ LABEL maintainer="github.com/satandyh" \
 
 # install gvmd and all dependencies
 RUN echo http://dl-cdn.alpinelinux.org/alpine/edge/community >>/etc/apk/repositories && \
-  apk --update add --no-cache gvmd
+  apk --update add --no-cache gvmd 
 
 # copy config
 # no need any config - we will just use VARIABLES

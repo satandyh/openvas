@@ -8,30 +8,29 @@ LABEL maintainer="github.com/satandyh" \
 
 # install openvas-scanner and delete redis
 RUN echo http://dl-cdn.alpinelinux.org/alpine/edge/community >>/etc/apk/repositories && \
-  apk --update add --no-cache openvas-scanner && \
-  find / -name redis -exec rm -rf '{}' \;
+  apk --update add --no-cache openvas-scanner
 
 # copy config
-COPY ./config/gvmd /etc/sysconfig/gvmd
+COPY ./config/openvassd.conf /etc/openvas/openvassd.conf
 
 # create user node
 RUN addgroup -g 2000 node
 RUN adduser -u 2000 -G node -s /bin/sh -D node
 
 # Entrypoint
-COPY ./entrypoint/gvmd_docker-entrypoint.sh /usr/local/bin/docker-entrypoint.sh
-RUN chmod +x /usr/local/bin/docker-entrypoint.sh
-ENTRYPOINT ["/usr/local/bin/docker-entrypoint.sh"]
+#COPY ./entrypoint/gvmd_docker-entrypoint.sh /usr/local/bin/docker-entrypoint.sh
+#RUN chmod +x /usr/local/bin/docker-entrypoint.sh
+#ENTRYPOINT ["/usr/local/bin/docker-entrypoint.sh"]
 
 # Start point
-COPY ./run/gvmd_run.sh /usr/local/bin/run.sh
-RUN chmod +x /usr/local/bin/run.sh
+COPY ./run/openvas_run.sh /usr/bin/run.sh
+RUN chmod +x /usr/bin/run.sh
 # run from user node
 USER node
-CMD ["/usr/local/bin/run.sh"]
+CMD ["/usr/bin/run.sh"]
 #CMD ["gvmd", "-f", "-v", "--listen=0.0.0.0", "--port=9390"]
 
-VOLUME ["/usr/local/var/lib/gvm"]
+#VOLUME ["/usr/local/var/lib/gvm"]
 
 # export gvmd ports
-EXPOSE 9390
+EXPOSE 9391 9392

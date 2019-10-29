@@ -1,18 +1,19 @@
 ---
 version: "3"
 services:
-  #  redis:
-  #    image: "redis:alpine"
-  #    hostname: "redis"
-  #    command: ["redis-server", "/usr/local/etc/redis/redis.conf"]
-  #    restart: always
-  #    ports:
-  #      - "6379:6379"
-  #    networks:
-  #      - redis-net
-  #    volumes:
-  #      - "../dockerfile/config/redis.conf:/usr/local/etc/redis/redis.conf:ro"
-  #      - "redis-data:/data"
+  redis:
+    image: "redis:alpine"
+    hostname: "redis"
+    command: ["redis-server", "/usr/local/etc/redis/redis.conf"]
+    restart: always
+    #ports:
+    #  - "6379:6379"
+    #networks:
+    #  - redis-net
+    volumes:
+      - "../dockerfile/config/redis.conf:/usr/local/etc/redis/redis.conf:ro"
+      #- "redis-data:/data"
+      - "redis-sock:/tmp"
 
   openvas:
     build:
@@ -27,12 +28,13 @@ services:
     #      - redis-net
     #      - default
     volumes:
-      - "gvm-connect:/usr/local/var/run"
-      - "openvas-data:/usr/local/var/lib/openvas"
-      - "gvm-data:/usr/local/var/lib/gvm"
+      #      - "gvm-connect:/usr/local/var/run"
+      #      - "openvas-data:/usr/local/var/lib/openvas"
+      #      - "gvm-data:/usr/local/var/lib/gvm"
       - "/etc/localtime:/etc/localtime:ro"
-#    depends_on:
-#      - redis
+      - "redis-sock:/tmp"
+    depends_on:
+      - redis
 
 #  gvmd:
 #    build:
